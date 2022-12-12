@@ -1,4 +1,26 @@
-@[toc]
+- [Blind75Note](#blind75note)
+- [String](#string)
+  * [3.Longest Substring Without Repeating Characters](#3longest-substring-without-repeating-characters)
+    + [1.Brute Force,use hashset](#1brute-force-use-hashset)
+    + [2.Sliding window](#2sliding-window)
+  * [424.Longest Repeating Character Replacement](#424longest-repeating-character-replacement)
+    + [1.sliding window](#1sliding-window)
+  * [242.Valid Anagram](#242valid-anagram)
+  * [49.Group Anagrams](#49group-anagrams)
+    + [Approach 1: Categorize by Sorted String](#approach-1--categorize-by-sorted-string)
+    + [Approach 2: Categorize by Count](#approach-2--categorize-by-count)
+  * [20.Valid parentheses](#20valid-parentheses)
+  * [Valid Palindrome](#valid-palindrome)
+  * [5.Longest Palindromic Substring*](#5longest-palindromic-substring-)
+    + [1.Calculate the max length](#1calculate-the-max-length)
+    + [2.Calculate the start and end index](#2calculate-the-start-and-end-index)
+  * [647Palindromic Substrings](#647palindromic-substrings)
+- [Binary](#binary)
+  * [104.Maximum Depth of Binary Tree](#104maximum-depth-of-binary-tree)
+  * [100.Same Tree](#100same-tree)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 # Blind75Note
 
