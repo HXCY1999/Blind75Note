@@ -1,4 +1,4 @@
-[top]
+@[toc]
 
 # Blind75Note
 
