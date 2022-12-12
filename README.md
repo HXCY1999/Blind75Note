@@ -1,5 +1,8 @@
 [top]
+
 # Blind75Note
+
+My second time doing these problem, so I wrote some note to help my understand these problem deeply.
 
 # String
 
@@ -660,8 +663,7 @@ class Solution {
             return false;
         else    //  if p.val == q.val check the sub tree
             return isSameTree(p.left,q.left) && isSameTree(p.right,q.right);
-              
-        
+                
     }
 }
 
