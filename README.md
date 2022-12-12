@@ -1,5 +1,4 @@
 # Blind75Note
-# Blind 75
 
 # String
 
