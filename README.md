@@ -22,11 +22,13 @@
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 
+@[toc]
+
 # Blind75Note
 
 My second time doing these problem, so I wrote some note to help my understand these problem deeply.
 
-# String
+# ************String************
 
 ## 3.Longest Substring Without Repeating Characters
 
@@ -180,9 +182,9 @@ The ending condition is right boundary < s.length(). at that time we've already 
 
 There are many details need to be mind in this problem. See the comment
 
-dic[s.charAt(i) - 'A']: put 26 character in certain place
+**dic[s.charAt(i) - 'A']:** put 26 character in certain place
 
-dic[0]-A,dic[1]-B,dic[2]-C,,,dic[26]-Z
+**dic[0]-A,dic[1]-B,dic[2]-C,,,dic[26]-Z**
 
 ```java
 class Solution {
@@ -593,7 +595,37 @@ class Solution {
 }
 ```
 
-# Binary
+## 14.Longest Common Prefix
+
+```java
+int a1 = "abc".indexOf("c"); //2
+int a2 = "abc".indexOf("ab");//0
+```
+
+```java
+class Solution {
+    
+public String longestCommonPrefix(String[] strs) {
+        
+    if(strs == null || strs.length == 0) return "";
+    
+    String prefix = strs[0];
+    
+    for(int i = 0; i < strs.length;i++){
+        while(strs[i].indexOf(prefix) != 0){          
+            prefix = prefix.substring(0,prefix.length() - 1);
+        }
+    }
+    
+    return prefix;
+    
+    }
+}
+```
+
+
+
+# ************Binary************
 
 ## 104.Maximum Depth of Binary Tree
 
@@ -637,6 +669,81 @@ class Solution {
     }
 }
 ```
+
+## 543.Diameter of Binary Tree
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/03/06/diamtree.jpg)
+
+```
+Input: root = [1,2,3,4,5]
+Output: 3
+Explanation: 3 is the length of the path [4,2,1,3] or [5,2,1,3].
+```
+
+Same as 104, just record each node's maximum height value of left+right node
+
+```java
+class Solution {
+    int max=0;
+    public int diameterOfBinaryTree(TreeNode root) {
+        if(root == null) return 0;
+        findHeight(root);
+        return max;
+    }
+    public int findHeight(TreeNode root){
+        if(root == null) return 0;
+
+        int left = findHeight(root.left);
+        int right = findHeight(root.right);
+
+        max = Math.max(max,right + left);
+
+        return Math.max(left,right) + 1;
+
+    }
+}
+```
+
+## 124.Binary Tree Maximum Path Sum
+
+**Example 2:**
+
+![img](https://assets.leetcode.com/uploads/2020/10/13/exx2.jpg)
+
+```
+Input: root = [-10,9,20,null,null,15,7]
+Output: 42
+Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.
+```
+
+Similar as 124.  Not difficult see the code
+
+```java
+class Solution {
+    int res = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        findMaxPath(root);
+        return res;
+ 	}
+
+    private int findMaxPath(TreeNode root){
+        if(root == null) return 0;
+        
+        //compare to 0, because if sub node is under 0. 
+        //just not add them,leave current node as path
+        int left = Math.max(findMaxPath(root.left),0);
+        int right = Math.max(findMaxPath(root.right),0);
+
+        res = Math.max(res,left + right + root.val);
+
+        return Math.max(left,right) + root.val;
+    }
+}
+```
+
+
 
 ## 100.Same Tree
 
@@ -691,4 +798,1407 @@ class Solution {
 
 ```
 
+## 572.Subtree of Another Tree
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/04/28/subtree1-tree.jpg)
+
+```
+Input: root = [3,4,5,1,2], subRoot = [4,1,2]
+Output: true
+```
+
+Just check if there is same tree
+
+```java
+class Solution {
+    public boolean isSubtree(TreeNode root, TreeNode subRoot) {
+        if(root == null && subRoot == null) return true;
+        if(root == null) return false;
+        
+        if(isSame(root,subRoot)) 
+            return true;
+        else 
+            return isSubtree(root.left,subRoot) || isSubtree(root.right,subRoot);
+    }
+    
+    private boolean isSame(TreeNode root, TreeNode subRoot){
+        if(root == null && subRoot == null) return true;
+        
+        if(root == null || subRoot == null) return false;
+        
+        if(root.val != subRoot.val)
+            return false;
+        else
+            return isSame(root.left,subRoot.left) && isSame(root.right,subRoot.right);
+    }
+}
+```
+
+
+
+## 226.Invert Binary Tree
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/03/14/invert1-tree.jpg)
+
+```
+Input: root = [4,2,7,1,3,6,9]
+Output: [4,7,2,9,6,3,1]
+```
+
+![image-20221212112211391](https://s2.loli.net/2022/12/13/KA1R4rNc9jdLkXW.png)
+
+Just simply swap each node's left root value and right root value
+
+```java
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        // return typr is TreeNode, but nothong to return so just return null
+        if(root == null) return null;
+
+        TreeNode tempRoot = root.left;
+        root.left = root.right;
+        root.right = tempRoot;
+
+        invertTree(root.left);
+        invertTree(root.right);
+
+        return root;
+    }    
+}
+
+```
+
+## 102.Binary Tree Level Order Traversal
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg)
+
+```
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[9,20],[15,7]]
+```
+
+
+
+![image-20221215155852384](https://s2.loli.net/2022/12/16/mhRBFbK6Y4iI1UA.png)
+
+
+
+```java
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if(root == null) return new ArrayList<>(new ArrayList<>());
+        
+        Queue<TreeNode> q = new LinkedList<>();
+        
+        q.add(root);
+        
+        List<List<Integer>> list = new ArrayList<>();
+        
+        while(!q.isEmpty()){
+            
+            List<Integer> subList = new ArrayList<>();
+            
+            int size = q.size();
+            
+            for(int i = 0; i < size;i++){
+               TreeNode node = q.peek();
+                
+                if(node.left !=null ){
+                   q.offer(node.left);
+                }
+                
+                if(node.right != null){
+                    q.offer(node.right);
+                }
+                subList.add(q.poll().val);
+        
+            }
+            list.add(subList);
+            
+        }
+        return list;
+    }                                                                   
+}
+```
+
+
+
+
+
+# ************Array************
+
+## 1480.Running Sum of 1d Array
+
+**Example 1:**
+
+```java
+Input: nums = [1,2,3,4]
+Output: [1,3,6,10]
+Explanation: Running sum is obtained as follows: [1, 1+2, 1+2+3, 1+2+3+4].
+```
+
+Kind of like a small DP question
+
+```java
+class Solution {
+    public int[] runningSum(int[] nums) {
+        int[] res = new int[nums.length];
+        
+        res[0] = nums[0];
+        
+        for(int i = 1; i < nums.length; i++){
+            res[i] = res[i-1] + nums[i];
+        }
+        
+        return res;
+    }
+}
+```
+
+## 724.Find Pivot Index
+
+### 1.Brute Force 
+
+ Calculate the left sum and then calculate the right sum,O(n^2)
+
+```java
+class Solution {
+    public int pivotIndex(int[] nums) {
+        
+        for(int i = 0 ; i < nums.length; i++){
+            int sumLeft = 0;
+        
+            int sumRight = 0;
+            
+            for(int j = 0; j < i ; j++){
+                sumLeft = sumLeft + nums[j];
+            }
+            
+            for(int k = i + 1; k < nums.length; k++){
+                sumRight = sumRight + nums[k];
+            }
+          
+            if(sumLeft == sumRight) return i;
+        }
+        
+        return -1;
+        
+    }
+}
+```
+
+### 2. Prefix Sum
+
+Firstly calculate the sum of the whole array.
+
+Then minus the left part and compare it to the right part. O(n)
+
+```java
+class Solution {
+    public int pivotIndex(int[] nums) {
+        
+        int leftSum = 0; 
+        
+        int rightSum = 0;
+        
+        int sum = 0;
+        
+        for(int n : nums) sum = sum + n;
+        
+        for(int i = 0; i < nums.length; i++){
+            rightSum = sum - nums[i];
+            
+            sum = sum - nums[i];
+            
+            //rightSum = sum - nums[i] - leftSum;
+                
+            if(leftSum == rightSum) return i;
+            
+            leftSum = leftSum + nums[i];
+        }
+        
+        return -1;
+    }
+}
+```
+
+# ************Implementation/Simulation************
+
+## 202. Happy Number
+
+**Example 1:**
+
+```java
+Input: n = 19
+Output: true
+Explanation:
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+```
+
+Firstly we iterate to update the value of n, and calculate its sum, if sum == 1 return true. 
+
+Secondly, we use a hash map to store the sum, if there's a repeat sum, there must be a loop, so we return false,n is not a happy number.
+
+```java
+class Solution {
+    public boolean isHappy(int n) {
+        HashSet<Integer> set = new HashSet<>();
+        while(true){
+            n = calculateSum(n);
+            
+            if(set.contains(n)) 
+                return false;
+            else
+                set.add(n);
+            
+            if(n == 1) return true;
+            
+        }
+    }
+    //calculate the sum 
+    //this method should be familiar
+    private int calculateSum(int n){
+        int temp = 0;
+        int sum = 0;
+            while(n > 0){
+                temp = n % 10;
+                sum = sum + temp*temp;
+                n = n/10;
+            }
+        return sum;
+    }
+}
+```
+
+Another edition
+
+```java
+ public boolean isHappy(int n) {
+        HashSet<Integer> set = new HashSet<>();
+        
+        while( n != 1 && !set.contains(n)){
+            set.add(n);            
+            n = calculateSum(n);  
+        }
   
+        return n == 1;
+ }
+```
+
+## 1706.Where Will the Ball Fall
+
+```java
+class Solution {
+    public int[] findBall(int[][] grid) {
+        
+        int row = grid.length;
+        
+        int col = grid[0].length;
+        
+        int[] res = new int[col];
+        
+        for(int j = 0 ; j < col; j++ ){//control ball
+            int x = 0; int y =j;
+            while(x < row){//control ball at which row
+                if(grid[x][y] == 1){
+                    if(y == col -1) 
+                        break;
+                    else if(grid[x][y+1] == -1)
+                        break;
+                    else
+                        x++;y++;
+                }
+                else{
+                    if(y == 0) 
+                        break;
+                    else if(grid[x][y-1] == 1)
+                        break;
+                    else
+                        x++;y--;
+                }
+            }
+            
+            if(x == row)
+                res[j] = y;    
+            else
+                res[j] = -1;
+            
+        }
+        
+        return res;
+    }
+}
+```
+
+# ************Linked List************
+
+## 234.Palindrome Linked List
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/03/03/pal1linked-list.jpg)
+
+```
+Input: head = [1,2,2,1]
+Output: true
+```
+
+**Example 2:**
+
+![img](https://assets.leetcode.com/uploads/2021/03/03/pal2linked-list.jpg)
+
+```java
+Input: head = [1,2]
+Output: false
+```
+
+**Find the middle point of the linked list. ** Use fast and slow pointer
+
+**Then reverse.**   null pre pointer used
+
+ **Compare.** while loop, after reverse the length is already the same so just compare the vaule
+
+Pretty interesting many small methods used
+
+```java
+class Solution {
+    public boolean isPalindrome(ListNode head) {
+        
+        ListNode mid = findMid(head);
+        
+        ListNode reversedHead = reverse(mid);
+        
+        return isSame(head,reversedHead);
+    }
+    
+    private ListNode findMid(ListNode head){
+        ListNode fast = head;
+        ListNode slow = head;
+        
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        if(fast != null) //odd length
+            slow = slow.next;
+
+        return slow;
+    }
+    
+    private ListNode reverse(ListNode head){
+        ListNode pre = null;
+        while(head != null){
+            ListNode next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
+    }
+    
+    private boolean isSame(ListNode head, ListNode reverseHead){
+        while(head != null && reverseHead != null){
+            if(head.val == reverseHead.val){
+                head = head.next;
+                reverseHead = reverseHead.next;
+            }else{
+                return false;
+            }    
+        }
+        return true;
+        
+    }
+     
+}
+```
+
+## 19.Remove Nth Node From End of List
+
+### 1.Method written by myself faster than 100%
+
+reverse-->remove-->reverse
+
+```java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+         head = reverse(head);
+        
+         head = remove(head,n);
+        
+         head = reverse(head);
+        
+        return head;
+    }
+    
+    private ListNode reverse(ListNode head){
+        ListNode pre = null;
+        while(head != null){
+            ListNode next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
+    }
+    
+    private ListNode remove(ListNode head, int n){   
+        if(n == 1){
+            head = head.next;
+            return head;
+        }
+        ListNode temp = head;
+        int count = 1;
+        while(temp != null){
+            if(count == n-1){
+                temp.next = temp.next.next;
+                break;
+            }else{
+                count++;
+                temp=temp.next;
+            }
+        }
+        return head;
+    }
+}
+```
+
+### 2.Two pointer
+
+Use fast and slow two pointer, let faster pointer move forward n steps, then fast and slow move forward together until fast.next == null. Then remove.
+
+**return dummy.next** because the first node may be deleted
+
+```java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0) ;
+        dummy.next = head;
+        ListNode fast = dummy;
+        ListNode slow = dummy;
+        
+        for(int i = 0 ; i < n; i++){
+            fast = fast.next;
+        }
+        while(fast.next != null){
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;
+        
+        return dummy.next;
+    }
+}
+```
+
+# ************Binary Search************
+
+## 33.Search in Rotated Sorted Array
+
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        //binary search can only used in sorted arrays
+        //so we need to search in two arrays seperately
+        //so we firstly find the peek point, the turing point 
+        //then divide the array into two sorted arrays
+        
+        int peekIndex = findPeekIndex(nums);
+        
+        if(target >= nums[0] && target <= nums[peekIndex]){
+            return binarySearch(nums,0,peekIndex,target);
+        }else{
+            return binarySearch(nums,peekIndex+1,nums.length-1,target);
+        }
+
+    }
+    
+    private int findPeekIndex(int[] nums){
+        int left = 0;
+        int right = nums.length-1;
+        if(nums[left] <= nums[right]) return right;
+        
+        while(left <= right){
+            int mid = (left + right)/2;
+            if(nums[mid] > nums[mid+1]) return mid;
+            else if(nums[left] <= nums[mid]) left = mid + 1;
+            else right = mid -1;
+        }
+        
+        return nums.length - 1;
+    }
+    
+    private int binarySearch(int[] nums, int left, int right, int target){
+        
+        while(left <= right){
+            int mid = (left + right)/2;
+            if(nums[mid] == target) return mid;
+            else if(nums[mid] > target) right = mid - 1;
+            else left = mid + 1;
+            
+        }
+        return -1;
+    }
+}
+```
+
+# ************BST************
+
+## 94.Binary Tree Inorder Traversal
+
+### 1.Recursive
+
+```java
+class Solution {
+    List<Integer> list = new ArrayList<>();
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if(root == null) return list;
+        
+        inorderTraversal(root.left);
+        list.add(root.val);
+        inorderTraversal(root.right);
+        
+        return list;
+        
+    }
+}
+```
+
+### 2.STACK
+
+```java
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        
+        TreeNode curr = root;
+        
+        while(curr != null || !stack.isEmpty()){
+            while(curr != null){
+                stack.push(curr);
+                curr = curr.left;
+            }
+            
+            curr = stack.pop();
+            list.add(curr.val);
+            curr = curr.right;
+        }
+        
+        return list;
+        
+        
+    }
+}
+```
+
+## 230.Kth Smallest Element in a BST
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/01/28/kthtree1.jpg)
+
+```
+Input: root = [3,1,4,null,2], k = 1
+Output: 1
+```
+
+**Example 2:**
+
+![img](https://assets.leetcode.com/uploads/2021/01/28/kthtree2.jpg)
+
+```
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+Output: 3
+```
+
+**One thing to keep in mind: The in-order traversal of a BST in an ordered array!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!**
+
+### 1.STACK
+
+```JAVA
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode curr = root;
+        int count = 0;
+        while(curr != null || !stack.isEmpty()){
+            while(curr != null){
+                stack.push(curr);
+                curr = curr.left;
+            }
+            curr = stack.pop();
+            count++;
+            if(count == k) return curr.val;
+            curr = curr.right;   
+        }
+        return 0;
+    }
+}
+```
+
+### 2.Recursive
+
+```java
+class Solution {
+    List<Integer> list = new ArrayList<>();
+    public int kthSmallest(TreeNode root, int k) {
+       
+        inorderTraversal(root);
+        
+        return list.get(k-1);
+    }
+    
+    private void inorderTraversal(TreeNode root){
+        if(root == null) return ;
+        
+        inorderTraversal(root.left);
+        list.add(root.val);
+        inorderTraversal(root.right);
+        
+    }
+}
+```
+
+
+
+## 108.Convert Sorted Array to Binary Search Tree
+
+```java
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if(nums == null) return null;
+        return consturctTreeFromArray(nums, 0, nums.length-1);
+        
+    }
+    
+    private TreeNode consturctTreeFromArray(int[] nums, int left, int right){
+        if(left > right) return null;
+            
+        int mid = (left + right)/2;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = consturctTreeFromArray(nums,left,mid-1);
+        root.right = consturctTreeFromArray(nums,mid+1,right);
+        
+        return root;
+        
+    }
+}
+```
+
+## 173.Binary Search Tree Iterator
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2018/12/25/bst-tree.png)
+
+```java
+Input
+["BSTIterator", "next", "next", "hasNext", "next", "hasNext", "next", "hasNext", "next", "hasNext"]
+[[[7, 3, 15, null, null, 9, 20]], [], [], [], [], [], [], [], [], []]
+Output
+[null, 3, 7, true, 9, true, 15, true, 20, false]
+
+Explanation
+BSTIterator bSTIterator = new BSTIterator([7, 3, 15, null, null, 9, 20]);
+bSTIterator.next();    // return 3
+bSTIterator.next();    // return 7
+bSTIterator.hasNext(); // return True
+bSTIterator.next();    // return 9
+bSTIterator.hasNext(); // return True
+bSTIterator.next();    // return 15
+bSTIterator.hasNext(); // return True
+bSTIterator.next();    // return 20
+bSTIterator.hasNext(); // return False
+```
+
+```java
+class BSTIterator {
+    
+    List<Integer> list = new ArrayList<>();
+    int index;
+
+    public BSTIterator(TreeNode root) {
+        inorder(root);
+    }
+    public void inorder(TreeNode root){
+        if(root == null) return;
+        inorder(root.left);
+        list.add(root.val);
+        inorder(root.right);
+    }
+    
+    public int next() {
+        return list.get(index++);
+    }
+    
+    public boolean hasNext() {
+        return index < list.size();
+    }
+}
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator obj = new BSTIterator(root);
+ * int param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
+ */
+```
+
+# ************Graph************
+
+## 207.Course Schedule(bfs,topological sort)
+
+**Example 1:**
+
+```
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: true
+Explanation: There are a total of 2 courses to take. 
+To take course 1 you should have finished course 0. So it is possible.
+```
+
+**Example 2:**
+
+```
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+Output: false
+Explanation: There are a total of 2 courses to take. 
+To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it is impossible.
+```
+
+![image-20230104102242669](https://s2.loli.net/2023/01/05/goz9avGE8ADFTcl.png)
+
+**This is a typical topological sort problem**
+
+https://www.bilibili.com/video/BV1pV4y1K75T/?spm_id_from=333.788.recommend_more_video.-1&vd_source=2611113609157526cc6cbc12a16fb322
+
+```java
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+          int[] indegree = new int[numCourses];
+        //every vertex's indegree++ (every edges)
+        for(int i = 0; i < prerequisites.length;i++){
+            indegree[prerequisites[i][0]]++;
+        }
+        //next setp is to decrease the indegree(start from indegree=0)
+        //when the all the indegree = 0, there is no cycle
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i = 0; i < indegree.length; i++){
+            if(indegree[i] == 0) queue.offer(i); //start point
+        }
+        
+        while(!queue.isEmpty()){
+            int currentVertex = queue.poll();
+            for(int i = 0 ; i < prerequisites.length; i++){
+                if(prerequisites[i][1] == currentVertex){
+                    indegree[prerequisites[i][0]]--;
+                    if(indegree[prerequisites[i][0]] == 0) 
+                        queue.offer(prerequisites[i][0]);
+                }
+            }
+        }
+        //Iterate through the indegree[] 
+        //to see if there are any elements that are not 0
+        //if so, there would be a cycle
+        for(int n : indegree){
+            if(n != 0) return false;
+        }
+        return true;
+        
+    }
+}
+```
+
+## 210.Course Schedule II(bfs)
+
+**Example 1:**
+
+```
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: [0,1]
+Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1].
+```
+
+**Example 2:**
+
+```
+Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+Output: [0,2,1,3]
+Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
+So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
+```
+
+```java
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        
+        int[] indegree = new int[numCourses];
+        //traversal prerequisites
+        for(int i = 0; i < prerequisites.length; i++){
+            indegree[prerequisites[i][0]]++;
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        //traversal indegree[] add 0-value element into queue
+        for(int i=0 ; i < indegree.length; i++){
+            if(indegree[i] == 0)
+                queue.offer(i);
+        }
+        
+        int[] coureOrder = new int[numCourses];
+        int index = 0;//index of courseOrder
+        //next step pop queue and decrase indegree(edges)
+        while(!queue.isEmpty()){
+            int currentCourse = queue.poll();
+            coureOrder[index++] = currentCourse;
+            //traversal prerequisites
+            for(int i = 0; i < prerequisites.length; i++){
+                if(prerequisites[i][1] == currentCourse){
+                    indegree[prerequisites[i][0]]--;
+                    if(indegree[prerequisites[i][0]] == 0)
+                        queue.offer(prerequisites[i][0]);
+                }            
+            }
+            
+        }
+        
+        for(int n : indegree){
+            if(n != 0) 
+                return new int[]{};
+        }
+        return coureOrder;
+    }
+}
+```
+
+## 269.Alien Dictionary
+
+
+
+
+
+
+
+## 200.Number of Islands(dfs)
+
+A simple dfs problem
+
+```java
+class Solution {
+    public int numIslands(char[][] grid) {
+        
+        int count = 0;
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        
+        for(int i = 0; i < grid.length;i++){
+            for(int j = 0; j < grid[0].length; j++){
+                if(grid[i][j] == '1' && !visited[i][j]){
+                    count++;
+                    dfs(grid,i,j,visited);
+                }
+            }
+        }
+        
+        return count;
+
+    }
+    
+    public void dfs(char[][] grid, int i, int j, boolean[][] visited){
+        
+        if(i<0 || i>=grid.length || j<0 || j>=grid[0].length || grid[i][j]=='0'
+          || visited[i][j])  return;
+        
+        visited[i][j] = true;
+        
+        dfs(grid,i+1,j,visited);
+        dfs(grid,i-1,j,visited);
+        dfs(grid,i,j+1,visited);
+        dfs(grid,i,j-1,visited);
+
+    }
+}
+
+```
+
+another edition 
+
+```java
+        int count = 0;
+        for(int i = 0; i < grid.length; i++){
+            for(int j = 0; j < grid[0].length;j++){
+                if(grid[i][j] == '1'){
+                    dfs(grid,i,j);
+                    count++;
+                }
+            }
+        }
+        return count;
+        
+        
+    }
+    public void dfs(char[][] grid,int i, int j){
+        if(i < 0 || j < 0 || i > grid.length-1 || j > grid[0].length-1 || grid[i][j] == '0') 
+            return;
+        
+        grid[i][j] = '0';
+        dfs(grid,i + 1,j);
+        dfs(grid,i - 1,j);
+        dfs(grid,i,j + 1);
+        dfs(grid,i,j - 1);
+```
+
+## 133.Clone Graph
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2019/11/04/133_clone_graph_question.png)
+
+```java
+Input: adjList = [[2,4],[1,3],[2,4],[1,3]]
+Output: [[2,4],[1,3],[2,4],[1,3]]
+Explanation: There are 4 nodes in the graph.
+1st node (val = 1)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+2nd node (val = 2)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+3rd node (val = 3)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+4th node (val = 4)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+```
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+class Solution {
+    Node[] visited = new Node[101];
+    
+    public Node cloneGraph(Node node) {
+        if(node == null) return null;
+        
+        Node copy = new Node(node.val);
+        
+        dfs(copy,node);
+        
+        return copy;
+        
+    }
+    
+    public void dfs(Node copy, Node node){
+        visited[copy.val] = copy;
+        
+        for(Node neighbor : node.neighbors){
+            
+            if(visited[neighbor.val] == null){
+                Node newNode = new Node(neighbor.val);
+                copy.neighbors.add(newNode);
+                dfs(newNode,neighbor);
+            }else{
+                copy.neighbors.add(visited[neighbor.val]);
+                
+            }
+         }       
+    }
+}
+```
+
+
+
+## 128.Longest Consecutive Sequence
+
+**Example 1:**
+
+```
+Input: nums = [100,4,200,1,3,2]
+Output: 4
+Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+```
+
+**Example 2:**
+
+```
+Input: nums = [0,3,7,2,5,8,4,6,0,1]
+Output: 9
+```
+
+### 1.Set
+
+```java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+
+         if(nums.length == 0 || nums == null) return 0;
+        
+         //put all the nums in the set 
+         //then find the beginning number then traversal the beginning number
+         Set<Integer> set = new HashSet<>();
+         for(int n : nums) set.add(n);
+         int res = 1;
+         int count = 1;
+
+        //O(n+n)
+         for(int num : set){
+             if(!set.contains(num - 1)){//find left 
+                 count = 1;
+                 while(set.contains(num + 1)){
+                     count++;
+                     num++;
+                 }
+                 res = Math.max(res,count);
+             }
+         }
+         return res;
+    }
+}
+
+```
+
+### 2.sort method but O(nlogn)
+
+```java
+// //         if(nums.length == 0 || nums == null) return 0;
+        
+// //         Arrays.sort(nums); //nlogn
+        
+// //         // for(int n : nums) System.out.print(n);
+        
+// //         int count = 1;
+// //         int res = 1;
+// //         for(int i = 0; i < nums.length - 1; i++){
+// //             if(nums[i+1] == nums[i]) continue;
+// //             if(nums[i+1] - nums[i] == 1){
+// //                 count++;  
+// //                 res = Math.max(res,count);
+// //             }else{
+// //                 count = 1;
+// //             }
+// //         }
+// //           return res;
+```
+
+
+
+## 261.Graph Valid Tree
+
+You have a graph of `n` nodes labeled from `0` to `n - 1`. You are given an integer n and a list of `edges` where `edges[i] = [ai, bi]` indicates that there is an undirected edge between nodes `ai` and `bi` in the graph.
+
+Return `true` *if the edges of the given graph make up a valid tree, and* `false` *otherwise*.
+
+ 
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2021/03/12/tree1-graph.jpg)
+
+```
+Input: n = 5, edges = [[0,1],[0,2],[0,3],[1,4]]
+Output: true
+```
+
+**Example 2:**
+
+![img](https://assets.leetcode.com/uploads/2021/03/12/tree2-graph.jpg)
+
+```
+Input: n = 5, edges = [[0,1],[1,2],[2,3],[1,3],[1,4]]
+Output: false
+```
+
+### 1.Iterative Breadth-First Search.
+
+```java
+class Solution {
+    public boolean validTree(int n, int[][] edges) {
+        
+        // if not satisfied, must have a circle
+        if(edges.length != n-1) return false;
+        
+        //then we just need to check there's isolate node
+        
+        List<List<Integer>> adjacencyList = new ArrayList<>();
+        
+        for(int i = 0; i < n; i++){
+            adjacencyList.add(new ArrayList<>());
+        }
+        
+        for(int[] edge : edges){
+            adjacencyList.get(edge[0]).add(edge[1]);
+            adjacencyList.get(edge[1]).add(edge[0]);
+        }
+        
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(0);
+        
+        Set<Integer> set = new HashSet<>();
+        
+        while(!queue.isEmpty()){
+            int node = queue.poll();
+            if(!set.contains(node)) set.add(node);
+            
+            for(int neighbour : adjacencyList.get(node)){
+            
+                if(set.contains(neighbour)) continue;
+                
+                set.add(neighbour);
+            
+                queue.add(neighbour);
+        }
+
+    }
+             return set.size() == n;
+
+}
+}
+```
+
+### 2.Recursive Depth-First Search.
+
+```java
+class Solution {
+    List<List<Integer>> adjacencyList = new ArrayList<>();
+    Set<Integer> visited = new HashSet<>();
+    
+    public boolean validTree(int n, int[][] edges) {
+       if(edges.length + 1 != n) return false;
+        
+        
+        for(int i =0; i < n; i++){
+            adjacencyList.add(new ArrayList<>());
+        }
+        
+        for(int[] edge : edges){
+            adjacencyList.get(edge[0]).add(edge[1]);
+            adjacencyList.get(edge[1]).add(edge[0]);
+        }
+        
+        dfs(0);    
+
+        return visited.size() == n;
+}
+    
+    private void dfs(int node){
+        
+        if(visited.contains(node)) return;
+
+        visited.add(node);
+        
+        for(int neighbor : adjacencyList.get(node)){
+            
+            dfs(neighbor);
+            
+        }
+        
+    }
+}
+```
+
+## 323.Number of Connected Components in an Undirected Graph
+
+A little bit like 261, use adjacency list to dfs or bfs
+
+### 1.DFS
+
+```java
+class Solution {
+        boolean[] visited;
+        List<List<Integer>> adjacencyList = new ArrayList<>();
+    public int countComponents(int n, int[][] edges) {
+        visited = new boolean[n];
+        for(int i = 0 ; i < n; i++){
+            adjacencyList.add(new ArrayList<>());
+        }
+        for(int[] edge : edges){
+            adjacencyList.get(edge[0]).add(edge[1]);
+            adjacencyList.get(edge[1]).add(edge[0]);
+
+        }
+        
+        int count = 0;
+        
+        for(int i = 0; i < adjacencyList.size(); i++){
+            if(!visited[i]){
+                count++;
+                visited[i]=true;
+                dfs(adjacencyList.get(i));
+            }
+        }
+        return count;
+    }
+    
+    public void dfs(List<Integer> nodes){
+        for(int node : nodes){
+            if(visited[node]) continue;
+            visited[node] = true;
+            dfs(adjacencyList.get(node));
+        }
+    }
+}
+```
+
+another edition for dfs
+
+```java
+class Solution {
+        boolean[] visited;
+        List<List<Integer>> adjacencyList = new ArrayList<>();
+    public int countComponents(int n, int[][] edges) {
+        visited = new boolean[n];
+        for(int i = 0 ; i < n; i++){
+            adjacencyList.add(new ArrayList<>());
+        }
+        for(int[] edge : edges){
+            adjacencyList.get(edge[0]).add(edge[1]);
+            adjacencyList.get(edge[1]).add(edge[0]);
+
+        }
+        
+        int count = 0;
+        
+        for(int i = 0; i < adjacencyList.size(); i++){
+            if(!visited[i]){
+                count++;
+                dfs(i);
+            }
+        }
+        return count;
+    }
+    
+    public void dfs(int node){
+        if(visited[node]) return;
+        
+        visited[node] = true;
+        
+        for(int neighbour : adjacencyList.get(node)){
+            dfs(neighbour);
+        }
+    }
+}
+```
+
+### 2.union find
+
+```java
+class Solution {
+      
+    int[] parent;
+    
+    public int countComponents(int n, int[][] edges) {
+       
+        parent = new int[n];
+        for(int i = 0 ; i < n; i++){
+            parent[i] = i;
+        }
+        
+        for(int[] edge : edges){
+            union(edge[0],edge[1]);
+        }
+        
+        Set<Integer> set = new HashSet<>();
+        
+        //avoid cycle, so use find
+        for(int i = 0 ; i < n; i++){
+            set.add(find(i));
+        }
+        
+        return set.size();
+        
+    }
+    public int find(int x){
+        if(parent[x] != x)
+            return find(parent[x]);
+        else 
+            return x;
+    }
+    
+    public void union(int node1, int node2){
+        
+        parent[find(node1)] = find(node2);
+        
+    }
+    
+}
+```
+
+
+
+## 994.Rotting Oranges
+
+**Example 1:**
+
+![img](https://assets.leetcode.com/uploads/2019/02/16/oranges.png)
+
+```
+Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+Output: 4
+```
+
+```java
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        Queue<int[]> queue = new LinkedList<>();
+        int freshNumber = 0;
+        int minute = 0;
+        
+        for(int i = 0 ; i < grid.length; i++){
+            for(int j = 0 ; j < grid[0].length; j++){
+                if(grid[i][j] == 2) 
+                    queue.offer(new int[]{i,j});
+                else if(grid[i][j] == 1) 
+                    freshNumber++; 
+            }
+        }
+        
+        if(freshNumber == 0) return 0;
+        
+        int[][] dirs = new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+        
+        while(!queue.isEmpty()){
+            minute++;
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                int[] point = queue.poll();
+                for(int[] dir : dirs){
+                    int x = point[0] + dir[0];
+                    int y = point[1] + dir[1];
+                    
+                    if(x < 0 || x > grid.length - 1 || 
+                       y <0 || y > grid.length - 1 ||
+                      grid[x][y] == 0 || grid[x][y] == 2) continue;
+                    
+                    grid[x][y] = 2;
+                    queue.offer(new int[]{x,y});
+                    freshNumber--;
+                }
+            }
+        }
+        
+        return freshNumber == 0 ? minute -1 : -1；
+        
+    }
+}
+```
+
+# Dynamic Programming
