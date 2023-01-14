@@ -65,8 +65,12 @@
     + [2.union find](#2union-find)
   * [994.Rotting Oranges](#994rotting-oranges)
 - [Dynamic Programming](#dynamic-programming)
+  * [300. Longest Increasing Subsequence](#300-longest-increasing-subsequence)
+    + [1.dp(n^2)](#1dp-n-2-)
+    + [2.binary search(nlogn)](#2binary-search-nlogn-)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 
 # Blind75Note
